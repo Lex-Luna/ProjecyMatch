@@ -1,0 +1,89 @@
+# .gitignore para proyectos Xamarin.Forms (Visual Studio)
+# Ignorar artefactos de build, archivos de usuario y ficheros específicos de plataformas
+
+########################################
+# Build / bin / obj
+########################################
+[Bb]in/
+[Oo]bj/
+build/
+**/bin/
+**/obj/
+
+########################################
+# Visual Studio
+########################################
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.VC.db
+
+########################################
+# Rider / IntelliJ
+########################################
+.idea/
+*.iml
+
+########################################
+# NuGet
+########################################
+packages/
+*.nupkg
+project.lock.json
+project.fragment.lock.json
+.nuget/
+
+########################################
+# Xamarin / Mono / Android / iOS
+########################################
+*.apk
+*.ap_
+*.aab
+*.dex
+*.class
+*.so
+*.jar
+*.keystore
+*.dll
+*.exe
+
+# Xamarin Android designer artifacts
+**/Resources/*.designer.cs
+
+# iOS
+*.mode1v3
+*.pbxuser
+*.perspectivev3
+xcuserdata/
+*.xcworkspace
+*.xcuserstate
+*.xcodeproj/project.xcworkspace/
+
+# macOS
+.DS_Store
+
+########################################
+# Gradle / Android Studio
+########################################
+.gradle/
+/.gradle/
+/.idea/
+gradle-app.setting
+
+########################################
+# Logs, temp
+########################################
+*.log
+*.tmp
+*.temp
+
+########################################
+# Misc
+########################################
+.vscode/
+*.swp
+Thumbs.db
+ehthumbs.db
+desktop.ini
