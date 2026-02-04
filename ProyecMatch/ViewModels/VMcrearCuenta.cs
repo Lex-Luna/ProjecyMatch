@@ -2,6 +2,8 @@
 using Newtonsoft.Json;
 using ProyecMatch.Conexiones;
 using ProyecMatch.Datos;
+using ProyecMatch.Models;
+using ProyecMatch.Views;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -28,6 +30,7 @@ namespace ProyecMatch.ViewModels
         string txtPaisActual;
         string txtCiudadActual;
         string txtPassword;
+        string txtDescripPersonaje;
 
         #endregion
         #region OBJETOS 
@@ -35,6 +38,7 @@ namespace ProyecMatch.ViewModels
         public string TxtApellido { get { return txtApellido; } set { SetValue(ref txtApellido, value); } }
         public string TxtCorreo { get { return txtCorreo; } set { SetValue(ref txtCorreo, value); } }
         public string TxtPassword { get { return txtPassword; } set { SetValue(ref txtPassword, value); } }
+        public string TxtDescripPersonaje { get { return txtDescripPersonaje; } set { SetValue(ref txtDescripPersonaje, value); } }
         public string TxtPaisActual { get { return txtPaisActual; } set { SetValue(ref txtPaisActual, value); } }
         public string TxtCiudadActual { get { return txtCiudadActual; } set { SetValue(ref txtCiudadActual, value); } }
 
@@ -63,7 +67,7 @@ namespace ProyecMatch.ViewModels
                         return;
                     }
                     // Validar longitud de contraseña
-                    if (TxtPassword.Length < 5)
+                    if (TxtPassword.Length < 6)
                     {
                         await DisplayAlert("Error", "La contraseña debe tener al menos 6 caracteres", "OK");
                         return;
@@ -91,6 +95,52 @@ namespace ProyecMatch.ViewModels
             }
         }
 
+        public async Task<string> ObtenerIdUsuario()
+        {
+
+            try
+            {
+                var authProvider = new FirebaseAuthProvider(new FirebaseConfig(Constantes.WebapyFirebase));
+                var guardarId = JsonConvert.DeserializeObject<FirebaseAuth>(Preferences.Get("MyFirebaseRefreshToken", ""));
+                var refrescarCOntenido = await authProvider.RefreshAuthAsync(guardarId);
+                /*Esete es el token que se guarda en el Usuario*/
+                Preferences.Set("MyFirebaseRefreshToken", JsonConvert.SerializeObject(refrescarCOntenido));
+                _IdUsuario = guardarId.User.LocalId;
+                //Preferences.Remove("MyFirebaseRefreshToken");
+
+            }
+            catch (Exception)
+            {
+                await DisplayAlert("Alerta", "X tu seguridad la sesion se a cerrado", "Ok");
+
+            }
+            return _IdUsuario;
+        }
+        public async Task InsertarUsuario()
+        {
+            try
+            {
+                var funcion = new Dusuario();
+                var parametros = new Musuario();
+                parametros.Estado = true;
+                parametros.Correo = TxtCorreo;
+                parametros.Nombre = TxtNombre;
+                parametros.Apellido = TxtApellido;
+                parametros.PaisActual = TxtPaisActual;
+                parametros.CiudadActual = TxtCiudadActual;
+                parametros.Password = TxtPassword;
+                parametros.DescripcionPersonaje = TxtDescripPersonaje;
+                parametros.PuntosTotales = 0;
+                parametros.Idusuario = _IdUsuario;
+                await funcion.InserUsuario(parametros);
+                //_IdUsuario = await funcion.InserUsuario(parametros);
+            }
+            catch (Exception er)
+            {
+                //await DisplayAlert("Alerta", "no se pudo crear el usuario", "Ok" + er);
+                throw er;
+            }
+        }
         public async Task ValidCuenta(string correo, string pass)
         {
             /*try
@@ -148,9 +198,11 @@ namespace ProyecMatch.ViewModels
                             {
 
                                 await CrearCuenta();
-                                //await ObtenerIdUsuario();
-                                //await InsertarUsuario();
-                                
+                                await ObtenerIdUsuario();
+                                await InsertarUsuario();
+                                await DisplayAlert("Perfecto", "Se a creado tu cuenta exitosamente", "Ok");
+                                await Navigation.PushAsync(new loginUsuario());
+
                             }
                             else
                                 await DisplayAlert("Alerta", "Agregue una contraseña", "OK");

@@ -3,70 +3,73 @@ using Firebase.Database.Query;
 using ProyecMatch.Conexiones;
 using ProyecMatch.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 public class Dusuario
 {
     private string _IdUsuario;
 
-    public async Task<string> CrearUsuarioEnFirebase(Musuario parametros)
+    
+    public async Task<string> InserUsuario(Musuario parametros)
     {
         try
         {
-            // Asegúrate de que Constantes.firebase es una instancia de FirebaseClient
-            var firebase = Constantes.firebase;
-
-            // Crear un nuevo nodo en "Usuario" con ID auto-generado
-            var result = await firebase
-                .Child("Usuarios")
-                .PostAsync(new Musuario()
-                {
-                    Admin = parametros.Admin,
-                    Apellidos = parametros.Apellidos,
-                    Password = parametros.Password, // Considera no guardar password en texto plano
-                    Correo = parametros.Correo,
-                    Estado = true,
-                    Nombres = parametros.Nombres,
-                    Idusuarios = parametros.Idusuarios,
-                    //FechaCreacion = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ")
-                });
-
-            // result.Key contiene el ID auto-generado por Firebase
-            _IdUsuario = result.Key;
-
-            // Si quieres usar tu propio ID, actualiza el nodo con ese ID
-            if (!string.IsNullOrEmpty(parametros.Idusuarios))
-            {
-                await firebase
-                    .Child("Usuarios")
-                    .Child(parametros.Idusuarios)
-                    .PutAsync(new Musuario()
-                    {
-                        Admin = parametros.Admin,
-                        Apellidos = parametros.Apellidos,
-                        Password = parametros.Password,
-                        Correo = parametros.Correo,
-                        Estado = true,
-                        Nombres = parametros.Nombres,
-                        Idusuarios = parametros.Idusuarios
-                        //FechaNaciemiento = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ")
-                    });
-
-                _IdUsuario = parametros.Idusuarios;
-            }
-
-            Console.WriteLine($"✅ Usuario guardado en Firebase Database. ID: {_IdUsuario}");
+            var data = await Constantes.firebase
+           .Child("Usuarios")
+           .PostAsync(new Musuario()
+           {
+               Admin = parametros.Admin,
+               FechaNaciemiento = parametros.FechaNaciemiento,
+               Estado = parametros.Estado,
+               Correo = parametros.Correo,
+               Nombre = parametros.Nombre,
+               Apellido = parametros.Apellido,
+               PaisActual = parametros.PaisActual,
+               CiudadActual = parametros.CiudadActual,
+               Password = parametros.Password,
+               DescripcionPersonaje = parametros.DescripcionPersonaje,
+               PuntosTotales = parametros.PuntosTotales,
+               
+               
+               Idusuario = parametros.Idusuario,
+           });
+            _IdUsuario = data.Key;
             return _IdUsuario;
         }
-        catch (FirebaseException firebaseEx)
+        catch (Exception e)
         {
-            Console.WriteLine($"❌ Error de Firebase: {firebaseEx.Message}");
-            throw new Exception($"Error de Firebase: {firebaseEx.Message}");
+
+            throw e;
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"❌ Error general: {ex.Message}");
-            throw;
-        }
+
+    }
+
+    public async Task<List<Musuario>> MostUsuarioXcorreo(Musuario p)
+    {
+        var useXcorreo = (await Constantes.firebase
+            .Child("Usuarios")
+            .OnceAsync<Musuario>())
+            .Where(a => a.Object.Correo == p.Correo && a.Object.Estado == true)
+            .Select(item => new Musuario
+            {
+                Idusuario = item.Key,
+                Estado = item.Object.Estado,
+                Admin = item.Object.Admin,
+                Correo = item.Object.Correo,
+                Nombre = item.Object.Nombre,
+                Apellido = item.Object.Apellido,
+                PaisActual = item.Object.PaisActual,
+                CiudadActual = item.Object.CiudadActual,
+                Password = item.Object.Password,
+                DescripcionPersonaje = item.Object.DescripcionPersonaje,
+                PuntosTotales = item.Object.PuntosTotales,
+
+                
+
+            }).ToList();
+        var json = Newtonsoft.Json.JsonConvert.SerializeObject(useXcorreo);
+        return useXcorreo;
     }
 }

@@ -11,7 +11,9 @@ namespace ProyecMatch
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new CrearCuenta());
+            MainPage = new NavigationPage(new loginUsuario());
+            //Quita la barra de navegacion azul 
+            NavigationPage.SetHasNavigationBar(MainPage, false);
         }
 
         protected override void OnStart()

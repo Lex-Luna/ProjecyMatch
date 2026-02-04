@@ -76,7 +76,7 @@ namespace ProyecMatch.Datos
                     var f = new Dusuario();
                     var p = new Musuario();
                     p.Correo = Correo;
-                    //var data = await f.MostUsuarioXcorreo(p);
+                    var data = await f.MostUsuarioXcorreo(p);
                     //Admin = data[0].Admin;
                     /*if (Admin == false)
                     {
@@ -90,8 +90,9 @@ namespace ProyecMatch.Datos
                 }
                 catch (Exception er)
                 {
-                    throw er;
-                }
+                    // Solución: Usar Xamarin.Forms.Application.Current.MainPage.DisplayAlert
+                    await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Alerta", "No fue posible la validacion por el error "+er, "OK");
+            }
 
             }
 
