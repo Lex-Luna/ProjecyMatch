@@ -11,7 +11,7 @@ namespace ProyecMatch
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new loginUsuario());
+            MainPage = new NavigationPage(new Bienvenida());
             //Quita la barra de navegacion azul 
             NavigationPage.SetHasNavigationBar(MainPage, false);
         }

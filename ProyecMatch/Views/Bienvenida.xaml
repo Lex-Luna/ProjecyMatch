@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:degradado="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+             NavigationPage.HasNavigationBar="False"
+             x:Class="ProyecMatch.Views.Bienvenida">
+    <Grid>
+        <!-- Fondo degradado que ocupa toda la pantalla -->
+        <degradado:PancakeView 
+        BackgroundGradientStartPoint="0,1"
+        BackgroundGradientEndPoint="0,0">
+            <degradado:PancakeView.BackgroundGradientStops>
+                <degradado:GradientStopCollection>
+                    <degradado:GradientStop Color="#132C6A" Offset="0.1"/>
+                    <degradado:GradientStop Color="#350A56" Offset="0.9"/>
+                </degradado:GradientStopCollection>
+            </degradado:PancakeView.BackgroundGradientStops>
+        </degradado:PancakeView>
+
+        <!-- ScrollView para el contenido -->
+        <ScrollView>
+            <StackLayout 
+            Spacing="15"
+            Padding="20">
+
+                <!-- Imagen de usuario -->
+                <Image Source="logo_projectmatch_.jpg"
+                   HeightRequest="100"
+                   WidthRequest="100"
+                   HorizontalOptions="Center"
+                   Aspect="AspectFit"/>
+
+                <!-- Título "Crear cuenta usuario" -->
+                <Label Text="Usuario"
+                   TextColor="White"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalTextAlignment="Center"
+                   Margin="0,0,0,10"/>
+                <Label Text="Crea un usuario que pueda alcanzar todos sus objetivos con compañeros afines a lo que ti quieres hacer, ponganse objetivos en comun y saquen proyectos adelante juntos"
+                   TextColor="White"
+                   FontSize="18"
+                   
+                   HorizontalTextAlignment="Center"
+                   Margin="0,0,0,10"/>
+                <Button Text="Ir a cuenta Usuario"
+Command="{Binding btnCrearcuentaComand}"
+BackgroundColor="#ACCBE4"
+TextColor="Black"
+CornerRadius="10"
+HeightRequest="50"
+Margin="0,20,0,0"
+FontAttributes="Bold"/>
+                <Label Text="Lider Grupal"
+   TextColor="White"
+   FontSize="24"
+   FontAttributes="Bold"
+   HorizontalTextAlignment="Center"
+   Margin="0,0,0,10"/>
+                <Label Text="Administra y guia grupos de personas con tu experiencia y liderazgo ayuda a muchos usuarios a alcansar sus objetivos y sus sueños."
+   TextColor="White"
+   FontSize="18"
+   
+   HorizontalTextAlignment="Center"
+   Margin="0,0,0,10"/>
+
+                <Button Text="Ir a cuenta Lider"
+        Command="{Binding btnCrearcuentaComand}"
+        BackgroundColor="#ACCBE4"
+        TextColor="Black"
+        CornerRadius="10"
+        HeightRequest="50"
+        Margin="0,20,0,0"
+        FontAttributes="Bold"/>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+
+
+</ContentPage>
